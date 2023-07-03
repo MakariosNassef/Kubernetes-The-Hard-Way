@@ -1,8 +1,3 @@
-variable "INSTANCE_TYPE" {
-  type        = string
-  description = "instance_type"
-}
-
 variable "AMI" {
   description = "AMI"
 }
@@ -23,3 +18,23 @@ variable "INGRESS_CIDER" {
   type = string
 }
 
+
+variable "MASTER_NODES" {
+  type = list(string)
+  default = []
+}
+
+variable "MASTER_INSTANCE_TYPE" {
+  type        = string
+  description = "instance_type"
+}
+
+variable "CONTROLLER_NODES" {
+  type = list(string)
+  default = []
+}
+
+variable "CONTROLLER_INSTANCE_TYPE" {
+  type        = string
+  description = "controller instance type"
+}

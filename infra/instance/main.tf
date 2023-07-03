@@ -1,21 +1,34 @@
 resource "aws_instance" "master_k8s_instance" {
   ami = var.AMI
+  for_each = toset(var.MASTER_NODES)
   tags = {
-    Name = "master_k8s_instance"
+    Name = each.value
   }
-  instance_type = var.INSTANCE_TYPE
+  instance_type = var.MASTER_INSTANCE_TYPE
   subnet_id     = var.PUBLIC_SUBNET_ID
-
   vpc_security_group_ids = [aws_security_group.ssh-allowed.id]
-
   key_name = aws_key_pair.master_k8s_keypair.key_name
 
   depends_on = [
     aws_key_pair.master_k8s_keypair,
   ]
-
 }
 
+resource "aws_instance" "controller_k8s_instance" {
+  ami = var.AMI
+  for_each = toset(var.CONTROLLER_NODES)
+  tags = {
+    Name = each.value
+  }
+  instance_type = var.CONTROLLER_INSTANCE_TYPE
+  subnet_id     = var.PUBLIC_SUBNET_ID
+  vpc_security_group_ids = [aws_security_group.ssh-allowed.id]
+  key_name = aws_key_pair.master_k8s_keypair.key_name
+
+  depends_on = [
+    aws_key_pair.master_k8s_keypair,
+  ]
+}
 
 resource "aws_security_group" "ssh-allowed" {
   vpc_id = var.MAIN_VPC_ID
